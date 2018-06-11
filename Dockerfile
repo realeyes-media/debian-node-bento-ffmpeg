@@ -10,9 +10,9 @@ ENV PATH="$PATH:/opt/bento4/bin" \
     BENTO4_TYPE="SRC"
 
 # Install Dependencies and FFMPEG
-RUN apt-get update && apt-get upgrade -y
 RUN apt-get update && \
     apt-get install -y git openssh-client gawk tzdata ffmpeg openntpd scons unzip zip && \
+    apt-get upgrade -y && \
     apt-get -qqy clean && \
     rm -rf /var/lib/apt/lists/*
 
