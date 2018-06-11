@@ -1,22 +1,5 @@
 FROM node:10-stretch
 
-# Install Node Deps and FFMPEG
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get update && \
-    apt-get install -y git openssh-client gawk tzdata ffmpeg && \
-    apt-get -qqy clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# Force Node to upgrade
-RUN npm -g update && npm install -g npm
-
-# Install Bento4
-RUN apt-get update && \
-    apt-get install -y openntpd scons unzip zip && \
-    apt-get -qqy clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# Install Bento
 ENV PATH="$PATH:/opt/bento4/bin" \
     BENTO4_BIN="/opt/bento4/bin" \
     BENTO4_BASE_URL="http://zebulon.bok.net/Bento4/source/" \
@@ -26,6 +9,17 @@ ENV PATH="$PATH:/opt/bento4/bin" \
     BENTO4_PATH="/opt/bento4" \
     BENTO4_TYPE="SRC"
 
+# Install Dependencies and FFMPEG
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get update && \
+    apt-get install -y git openssh-client gawk tzdata ffmpeg openntpd scons unzip zip && \
+    apt-get -qqy clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Force Node to upgrade
+RUN npm -g update && npm install -g npm
+
+# Install Bento4
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 WORKDIR /tmp/bento4
     # download and check bento4
