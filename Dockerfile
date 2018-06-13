@@ -1,4 +1,4 @@
-FROM node:10-stretch
+FROM node:8-stretch
 
 ENV PATH="$PATH:/opt/bento4/bin" \
     BENTO4_BIN="/opt/bento4/bin" \
