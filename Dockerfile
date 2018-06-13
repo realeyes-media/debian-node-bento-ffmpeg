@@ -29,7 +29,6 @@ RUN wget ${BENTO4_BASE_URL}Bento4-${BENTO4_TYPE}-${BENTO4_VERSION}.zip && \
 RUN mkdir -p ${BENTO4_PATH} && \
     unzip Bento4-${BENTO4_TYPE}-${BENTO4_VERSION}${BENTO4_TARGET}.zip -d ${BENTO4_PATH} && \
     rm -rf Bento4-${BENTO4_TYPE}-${BENTO4_VERSION}${BENTO4_TARGET}.zip && \
-    apt-get remove -y unzip && \
     # don't do these steps if using binary install
     cd ${BENTO4_PATH} && scons -u build_config=Release target=x86_64-unknown-linux && \
     cp -R ${BENTO4_PATH}/Build/Targets/x86_64-unknown-linux/Release ${BENTO4_PATH}/bin && \
@@ -38,5 +37,8 @@ RUN mkdir -p ${BENTO4_PATH} && \
 
 # Install PM2
 RUN npm install pm2 -g
+
+# Remove unnecessary software
+apt-get purge -y unzip mercurial mariadb
 
 CMD [ "pm2","--version" ]
