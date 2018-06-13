@@ -39,6 +39,6 @@ RUN mkdir -p ${BENTO4_PATH} && \
 RUN npm install pm2 -g
 
 # Remove unnecessary software
-RUN apt-get purge -y unzip mercurial mariadb
+RUN apt-get purge -y unzip mercurial mercurial-common curl
 
 CMD [ "pm2","--version" ]
