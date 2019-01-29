@@ -13,12 +13,12 @@ ENV BENTO4_ZIP="Bento4-${BENTO4_TYPE}-${BENTO4_VERSION}${BENTO4_TARGET}.zip" \
     BENTO4_FILE="Bento4-${BENTO4_TYPE}-${BENTO4_VERSION}${BENTO4_TARGET}"
 
 # Force Node to update
-RUN npm -g update && npm install -g npm
+RUN npm -g update && npm install -g npm && npm install pm2 -g
 
 # Install Dependencies and FFMPEG
 RUN install_packages git openssh-client gawk tzdata ffmpeg openntpd scons unzip zip wget
 
-# Install Bento4 from binaries, checking SHA
+# Install Bento4 from binaries, checking SHA, clean up
 WORKDIR /tmp/bento4
 RUN wget ${BENTO4_BASE_URL}${BENTO4_ZIP} && \
     sha1sum -b ${BENTO4_ZIP} | \
@@ -29,13 +29,12 @@ RUN wget ${BENTO4_BASE_URL}${BENTO4_ZIP} && \
     cd ${BENTO4_PATH}/${BENTO4_FILE} && \
     mv * ${BENTO4_PATH} && \
     rm -rf ${BENTO4_PATH}/docs && \
-    rm -rf ${BENTO4_PATH}/${BENTO4_FILE}
+    rm -rf ${BENTO4_PATH}/${BENTO4_FILE} && \
+    cd / && \
+    rm -rf /tmp/bento4 && \
+    apt-get purge -y unzip mercurial mercurial-common curl git gawk zip wget systemd
 
 # Install PM2
 WORKDIR /app
-RUN npm install pm2 -g
-
-# Remove unnecessary software
-RUN rm -rf /tmp/bento4 && apt-get update && apt-get purge -y unzip mercurial mercurial-common curl git gawk zip wget systemd
 
 CMD [ "pm2","--version" ]
