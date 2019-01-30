@@ -1,6 +1,8 @@
-FROM bitnami/node:10-debian-9-prod 
+FROM bitnami/python:2.7.15-debian-9-r193 as python
 
-ENV PATH="$PATH:/opt/bento4/bin" \
+FROM bitnami/node:10-debian-9-prod
+
+ENV PATH="$PATH:/opt/bento4/bin:/opt/bitnami/python/bin" \
     BENTO4_BIN="/opt/bento4/bin" \
     BENTO4_BASE_URL="http://zebulon.bok.net/Bento4/binaries/" \
     BENTO4_TYPE="SDK" \
@@ -37,7 +39,9 @@ RUN wget ${BENTO4_BASE_URL}${BENTO4_ZIP} && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Install PM2
+# Add Python from Bitnami base image
+COPY --from=python /opt/bitnami/python /opt/bitnami/python
+
 WORKDIR /app
 
 CMD [ "pm2","--version" ]
