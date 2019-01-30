@@ -1,4 +1,4 @@
-FROM bitnami/python:2.7.15-debian-9-r193 as python
+FROM bitnami/python:2.7.15-debian-9 as python
 
 FROM bitnami/node:10-debian-9-prod
 
