@@ -1,6 +1,6 @@
 FROM bitnami/python:2.7.15-debian-9 as python
 
-FROM bitnami/node:10-debian-9-prod
+FROM bitnami/node:8-debian-9-prod
 
 ENV PATH="$PATH:/opt/bento4/bin:/opt/bitnami/python/bin" \
     BENTO4_BIN="/opt/bento4/bin" \
