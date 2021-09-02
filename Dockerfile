@@ -17,8 +17,18 @@ ENV BENTO4_ZIP="Bento4-${BENTO4_TYPE}-${BENTO4_VERSION}${BENTO4_TARGET}.zip" \
 # Force Node to update
 RUN npm -g update && npm install -g npm && npm install pm2 -g
 
-# Install Dependencies and FFMPEG
-RUN install_packages git openssh-client gawk tzdata ffmpeg openntpd scons unzip zip wget
+# Install Dependencies
+RUN install_packages git openssh-client gawk tzdata openntpd scons unzip zip wget xz-utils
+
+# Install FFMPEG
+RUN apt autoremove --purge ffmpeg && \
+    mkdir -p /opt/ffmpeg && \
+    cd /opt/ffmpeg && \
+    wget -c https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz && \
+    tar xvf ffmpeg-release-amd64-static.tar.xz && \
+    cd ffmpeg-4.4-amd64-static/ && \
+    ln -s "${PWD}/ffmpeg" /usr/local/bin/ && \
+    ln -s "${PWD}/ffprobe" /usr/local/bin/
 
 # Install Bento4 from binaries, checking SHA
 WORKDIR /tmp/bento4
@@ -35,7 +45,7 @@ RUN wget ${BENTO4_BASE_URL}${BENTO4_ZIP} && \
     cd / && \
     rm -rf /tmp/bento4 && \
     apt-get update && \
-    apt-get purge -y unzip curl mercurial mercurial-common zip wget systemd && \
+    apt-get purge -y unzip curl mercurial mercurial-common zip wget systemd xz-utils && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
