@@ -20,7 +20,7 @@ RUN npm -g update && npm install -g npm && npm install pm2 -g
 # Install Dependencies
 RUN install_packages git openssh-client gawk tzdata openntpd scons unzip zip wget xz-utils
 
-# Install FFMPEG
+# Install FFMPEG : https://www.osradar.com/install-the-latest-version-ffmpeg-ubuntu-debian/
 RUN apt autoremove --purge ffmpeg && \
     mkdir -p /opt/ffmpeg && \
     cd /opt/ffmpeg && \
